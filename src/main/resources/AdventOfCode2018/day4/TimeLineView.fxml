@@ -14,6 +14,19 @@
       </HBox>
    </bottom>
    <center>
-      <TableView fx:id="tableTimeLine" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Part 1">
+               <content>
+                  <TableView fx:id="tableTimeLine" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+          <Tab text="Part 2">
+               <content>
+                  <TableView fx:id="countersTable" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
    </center>
 </BorderPane>

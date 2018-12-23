@@ -6,6 +6,37 @@ import kotlin.test.assertEquals
 
 class Day4Test {
 
+    val example = """
+            [1518-11-01 00:00] Guard #10 begins shift
+            [1518-11-01 00:05] falls asleep
+            [1518-11-01 00:25] wakes up
+            [1518-11-01 00:30] falls asleep
+            [1518-11-01 00:55] wakes up
+            [1518-11-03 00:05] Guard #10 begins shift
+            [1518-11-03 00:24] falls asleep
+            [1518-11-03 00:29] wakes up
+        """.trimIndent().split("\n")
+
+    val example2 = """
+        [1518-11-01 00:00] Guard #10 begins shift
+        [1518-11-01 00:05] falls asleep
+        [1518-11-01 00:25] wakes up
+        [1518-11-01 00:30] falls asleep
+        [1518-11-01 00:55] wakes up
+        [1518-11-01 23:58] Guard #99 begins shift
+        [1518-11-02 00:40] falls asleep
+        [1518-11-02 00:50] wakes up
+        [1518-11-03 00:05] Guard #10 begins shift
+        [1518-11-03 00:24] falls asleep
+        [1518-11-03 00:29] wakes up
+        [1518-11-04 00:02] Guard #99 begins shift
+        [1518-11-04 00:36] falls asleep
+        [1518-11-04 00:46] wakes up
+        [1518-11-05 00:03] Guard #99 begins shift
+        [1518-11-05 00:45] falls asleep
+        [1518-11-05 00:55] wakes up
+    """.trimIndent().split("\n")
+
     @Test
     fun testParseDate() {
         val result = parseDate("[1518-08-25 00:52] wakes up")
@@ -37,45 +68,61 @@ class Day4Test {
     }
 
     @Test
-    fun testGetGuardSleepRanges(){
-        val logEntries = readEntries("""
-            [1518-11-01 00:00] Guard #10 begins shift
-            [1518-11-01 00:05] falls asleep
-            [1518-11-01 00:25] wakes up
-            [1518-11-01 00:30] falls asleep
-            [1518-11-01 00:55] wakes up
-            [1518-11-03 00:05] Guard #10 begins shift
-            [1518-11-03 00:24] falls asleep
-            [1518-11-03 00:29] wakes up
-        """.trimIndent().split("\n"))
+    fun testGetGuardSleepRanges() {
+        val logEntries = readEntries(example)
         val result = logEntries.getGuardSleepRanges()
-        assertEquals(listOf(5..25,30..55,24..29),result)
+        assertEquals(listOf(5..25, 30..55, 24..29), result)
     }
 
     @Test
-    fun testFindOptimised(){
-        assertEquals(GuardSleepInfo(24,53), listOf(5..25,30..55,24..29).findMinute())
+    fun testFindOptimised() {
+        assertEquals(GuardSleepInfo(24, 53), listOf(5..25, 30..55, 24..29).findMinute())
     }
 
     @Test
-    fun testResolveExample(){
-        val logEntries = readEntries("""
-            [1518-11-01 00:00] Guard #10 begins shift
-            [1518-11-01 00:05] falls asleep
-            [1518-11-01 00:25] wakes up
-            [1518-11-01 00:30] falls asleep
-            [1518-11-01 00:55] wakes up
-            [1518-11-03 00:05] Guard #10 begins shift
-            [1518-11-03 00:24] falls asleep
-            [1518-11-03 00:29] wakes up
-        """.trimIndent().split("\n"))
+    fun testResolveExample() {
+        val logEntries = readEntries(example)
 
         assertEquals(240, resolvePuzzlePart1(logEntries))
     }
 
     @Test
-    fun testResolvePart1(){
+    fun testResolvePart1() {
         val logEntries = readFile()
         assertEquals(140932, resolvePuzzlePart1(logEntries))
+    }
+
+    @Test
+    fun testGetMostAsleepGuard() {
+        val logEntries = readEntries(example2)
+        assertEquals(99 to 45, getMostAsleepGuard(logEntries))
+    }
+
+    @Test
+    fun testCountSleepCountByGuard() {
+        val logEntries = readEntries(example2)
+        val countByGuard = countSleepCountByGuard(logEntries)
+        assertEquals(
+                "000001111111111111111111221111111111111111111111111111110000",
+                countByGuard[10]?.joinToString(""))
+
+        assertEquals(
+                "000000000000000000000000000000000000111122222332222111110000",
+                countByGuard[99]?.joinToString(""))
+    }
+
+    @Test
+    fun testResolveExamplePart2(){
+        val logEntries = readEntries(example2)
+        val (guardId, minute) = getMostAsleepGuard(logEntries)
+        assertEquals(99 * 45, guardId * minute)
+    }
+
+    @Test
+    fun testResolvePart2(){
+        val logEntries = readFile()
+        val (guardId, minute) = getMostAsleepGuard(logEntries)
+        println("Most probable guard asleep #$guardId, at minute $minute")
+        assertEquals(52833, guardId * minute)
     }
 }

@@ -1,5 +1,6 @@
 package AdventOfCode2018.day4
 
+import com.github.ajalt.mordant.TermColors
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -9,7 +10,13 @@ enum class ActionEnum {
     BEGINS_SHIFT, FALLS_ASLEEP, WAKES_UP
 }
 
-data class LogEntry(var action: ActionEnum, var date: LocalDateTime, var guardId: Int = 0)
+data class LogEntry(var action: ActionEnum, var date: LocalDateTime, var guardId: Int = 0) {
+    override fun toString(): String {
+        return with(TermColors()) {
+            red("%6d - %10s - %s".format(guardId, date, action.toString()))
+        }
+    }
+}
 
 fun parseDate(entry: String): LocalDateTime =
         Regex("""\[(.+)] .+""")
@@ -55,29 +62,26 @@ fun readEntries(entries: List<String>): List<LogEntry> {
                     }
                 }
             }
+            .onEach(::println)
 }
 
-fun List<LogEntry>.findHoursByGuard(): Map<Int, GuardSleepInfo?> =
+fun List<LogEntry>.findMinuteByGuard(): Map<Int, GuardSleepInfo?> =
         groupBy(LogEntry::guardId)
                 .mapValues { (_, entries) -> entries.getGuardSleepRanges() }
                 .mapValues { (_, ranges) -> ranges.findMinute() }
                 .filterValues(Objects::nonNull)
 
-fun List<LogEntry>.getGuardSleepRanges(): List<IntRange> {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-    println("#${get(0).guardId}")
-
-    return asSequence()
-            .filter { it.action != ActionEnum.BEGINS_SHIFT }
-            .partition { it.action == ActionEnum.FALLS_ASLEEP }
-            .let { (fallsAsleepList, wakesUpList) -> fallsAsleepList zip wakesUpList }
-            .map { (from, to) ->
-                val fromMinute = from.date.minute
-                val toMinute = to.date.minute
-                fromMinute..toMinute
-            }
-            .toList()
-}
+fun List<LogEntry>.getGuardSleepRanges(): List<IntRange> =
+        asSequence()
+                .filter { it.action != ActionEnum.BEGINS_SHIFT }
+                .partition { it.action == ActionEnum.FALLS_ASLEEP }
+                .let { (fallsAsleepList, wakesUpList) -> fallsAsleepList zip wakesUpList }
+                .map { (from, to) ->
+                    val fromMinute = from.date.minute
+                    val toMinute = to.date.minute
+                    fromMinute..toMinute
+                }
+                .toList()
 
 data class GuardSleepInfo(val minute: Int, val sleepTotal: Int)
 
@@ -92,8 +96,45 @@ fun List<IntRange>.findMinute(): GuardSleepInfo? {
 }
 
 fun resolvePuzzlePart1(entries: List<LogEntry>): Int =
-        entries.findHoursByGuard()
+        entries.findMinuteByGuard()
                 .toList()
                 .maxBy { (_, info) -> info?.sleepTotal ?: 0 }
-                ?.also(::println)
-                ?.let { (guardId, info) -> guardId * (info?.minute?: 0) } ?: throw Exception("Solution not found")
+                ?.let { (guardId, info) -> guardId * (info?.minute ?: 0) } ?: throw Exception("Solution not found")
+
+fun List<IntRange>.countSleep(): Array<Int> {
+    val counters = Array(60) { 0 }
+    flatten().forEach { minute -> counters[minute]++ }
+    return counters
+}
+
+fun countSleepCountByGuard(entries: List<LogEntry>): Map<Int, Array<Int>> =
+        entries.groupBy(LogEntry::guardId)
+                .mapValues { (_, entries) -> entries.getGuardSleepRanges() }
+                .mapValues { (_, ranges) -> ranges.countSleep() }
+
+
+//fun Map<Int, Array<Int>>.getMostAsleepGuard(minute: Int): Int {
+//    return
+//}
+fun getMostAsleepGuard(entries: List<LogEntry>): Pair<Int,Int> {
+    var maxCount = 0
+    var mostAsleepGuardId = 0
+    var mostProbableMinute = 0
+    countSleepCountByGuard(entries)
+            .also { countersByGuard ->
+                (0 until 60).map { minute ->
+                    val (guardId, count) = countersByGuard.maxBy { (_, minutes) -> minutes[minute] }
+                            ?.let {(guardId, minutes) ->
+                                guardId to minutes[minute]
+                            } ?: throw Exception("max value not found")
+                    if(count > maxCount){
+                        maxCount = count
+                        mostAsleepGuardId = guardId
+                        mostProbableMinute = minute
+                    }
+                }
+            }
+    return mostAsleepGuardId to mostProbableMinute
+}
+
+//fun resolvePuzzlePart2(entries:List<LogEntry>):List
