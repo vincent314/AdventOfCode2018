@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: adventofcode
+---
+testFramework: spek
+sourceLanguage: kotlin
