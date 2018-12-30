@@ -1,3 +1,7 @@
 micronaut:
     application:
         name: microservice
+    server:
+        cors:
+            enabled: true
+
