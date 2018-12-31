@@ -84,7 +84,7 @@ fun List<LogEntry>.getGuardSleepRanges(): List<IntRange> =
                 .map { (from, to) ->
                     val fromMinute = from.date.minute
                     val toMinute = to.date.minute
-                    fromMinute..toMinute
+                    fromMinute until toMinute
                 }
                 .toList()
 

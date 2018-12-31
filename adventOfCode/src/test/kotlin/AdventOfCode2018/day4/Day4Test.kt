@@ -72,7 +72,7 @@ class Day4Test {
     fun testGetGuardSleepRanges() {
         val logEntries = readEntries(example)
         val result = logEntries.getGuardSleepRanges()
-        assertEquals(listOf(5..25, 30..55, 24..29), result)
+        assertEquals(listOf(5..24, 30..54, 24..28), result)
     }
 
     @Test
@@ -93,29 +93,23 @@ class Day4Test {
         assertEquals(140932, resolvePuzzlePart1(logEntries))
     }
 
-//    @Test
-//    fun testGetMostAsleepGuard() {
-//        val logEntries = readEntries(example2)
-//        assertEquals(99 to 45, getMostAsleepGuard(logEntries))
-//    }
-
     @Test
     fun testCountSleepCountByGuard() {
         val logEntries = readEntries(example2)
         val countByGuard = getSleepsByGuard(logEntries)
         assertEquals(
-                "000001111111111111111111221111111111111111111111111111110000",
+                "000001111111111111111111211110111111111111111111111111100000",
                 countByGuard[10]?.sleepInfos?.map(GuardSleepInfo::count)?.joinToString(""))
 
         assertEquals(
-                "000000000000000000000000000000000000111122222332222111110000",
+                "000000000000000000000000000000000000111122222322221111100000",
                 countByGuard[99]?.sleepInfos?.map(GuardSleepInfo::count)?.joinToString(""))
 
         assertEquals(
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...........XXXXXXXXX",
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..........XXXXXXXXXX",
                 countByGuard[10]?.sleepInfos?.joinToString("") { if (it.isMax) "X" else "." })
         assertEquals(
-                "........................................XXXXXXXXXXX.........",
+                "........................................XXXXXXXXXX..........",
                 countByGuard[99]?.sleepInfos?.joinToString("") { if (it.isMax) "X" else "." })
     }
 
@@ -131,6 +125,6 @@ class Day4Test {
         val logEntries = readFile(File("../input/day4.txt"))
         val (guardId, minute) = findMostAsleepGuard(getSleepsByGuard(logEntries))
         println("Most probable guard asleep #$guardId, at minute $minute")
-        assertEquals(52833, guardId * minute)
+        assertEquals(51232, guardId * minute)
     }
 }
