@@ -1,6 +1,7 @@
 package AdventOfCode2018.day4
 
 import org.junit.Test
+import java.io.File
 import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
@@ -88,7 +89,7 @@ class Day4Test {
 
     @Test
     fun testResolvePart1() {
-        val logEntries = readFile()
+        val logEntries = readFile(File("../input/day4.txt"))
         assertEquals(140932, resolvePuzzlePart1(logEntries))
     }
 
@@ -118,18 +119,18 @@ class Day4Test {
                 countByGuard[99]?.sleepInfos?.joinToString("") { if (it.isMax) "X" else "." })
     }
 
-//    @Test
-//    fun testResolveExamplePart2() {
-//        val logEntries = readEntries(example2)
-//        val (guardId, minute) = getMostAsleepGuard(logEntries)
-//        assertEquals(99 * 45, guardId * minute)
-//    }
-//
-//    @Test
-//    fun testResolvePart2() {
-//        val logEntries = readFile()
-//        val (guardId, minute) = getMostAsleepGuard(logEntries)
-//        println("Most probable guard asleep #$guardId, at minute $minute")
-//        assertEquals(52833, guardId * minute)
-//    }
+    @Test
+    fun testResolveExamplePart2() {
+        val logEntries = readEntries(example2)
+        val (guardId, minute) = findMostAsleepGuard(getSleepsByGuard(logEntries))
+        assertEquals(99 * 45, guardId * minute)
+    }
+
+    @Test
+    fun testResolvePart2() {
+        val logEntries = readFile(File("../input/day4.txt"))
+        val (guardId, minute) = findMostAsleepGuard(getSleepsByGuard(logEntries))
+        println("Most probable guard asleep #$guardId, at minute $minute")
+        assertEquals(52833, guardId * minute)
+    }
 }
