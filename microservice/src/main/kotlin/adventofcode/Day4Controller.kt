@@ -1,8 +1,6 @@
 package adventofcode
 
-import AdventOfCode2018.day4.LogEntry
-import AdventOfCode2018.day4.countSleepCountByGuard
-import AdventOfCode2018.day4.readFile
+import AdventOfCode2018.day4.*
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 
@@ -15,7 +13,8 @@ class Day4Controller {
     }
 
     @Get("/sleeps")
-    fun guardSleeps(): Map<Int, Array<Int>> {
-        return countSleepCountByGuard(readFile())
-    }
+    fun guardSleeps() = getSleepsByGuard(readFile())
+
+//    @Get("/mostAsleepByMinute")
+//    fun findGuardByMinute() = findMostAsleepByMinute(getSleepsByGuard(readFile()))
 }

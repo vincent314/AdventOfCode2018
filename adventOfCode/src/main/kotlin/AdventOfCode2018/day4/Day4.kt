@@ -18,6 +18,11 @@ data class LogEntry(var action: ActionEnum, var date: LocalDateTime, var guardId
     }
 }
 
+
+data class GuardSleepInfo(val minute: Int, val sleepTotal: Int = 0, val count: Int = 0, val isMax: Boolean = false)
+
+class GuardSleeps(val guardId: Int, val sleepInfos: Array<GuardSleepInfo>)
+
 fun parseDate(entry: String): LocalDateTime =
         Regex("""\[(.+)] .+""")
                 .find(entry)
@@ -83,8 +88,6 @@ fun List<LogEntry>.getGuardSleepRanges(): List<IntRange> =
                 }
                 .toList()
 
-data class GuardSleepInfo(val minute: Int, val sleepTotal: Int)
-
 fun List<IntRange>.findMinute(): GuardSleepInfo? {
     val sleepTotal = flatten().count()
 
@@ -107,34 +110,54 @@ fun List<IntRange>.countSleep(): Array<Int> {
     return counters
 }
 
-fun countSleepCountByGuard(entries: List<LogEntry>): Map<Int, Array<Int>> =
-        entries.groupBy(LogEntry::guardId)
-                .mapValues { (_, entries) -> entries.getGuardSleepRanges() }
-                .mapValues { (_, ranges) -> ranges.countSleep() }
+fun getSleepsByGuard(entries: List<LogEntry>): Map<Int, GuardSleeps> {
+    val countByGuard = entries.groupBy(LogEntry::guardId)
+            .mapValues { (_, entries) -> entries.getGuardSleepRanges() }
+            .mapValues { (_, ranges) -> ranges.countSleep() }
 
+    val mostAsleepByMinute = findMostAsleepByMinute(countByGuard)
 
-//fun Map<Int, Array<Int>>.getMostAsleepGuard(minute: Int): Int {
-//    return
-//}
-fun getMostAsleepGuard(entries: List<LogEntry>): Pair<Int,Int> {
-    var maxCount = 0
-    var mostAsleepGuardId = 0
-    var mostProbableMinute = 0
-    countSleepCountByGuard(entries)
-            .also { countersByGuard ->
-                (0 until 60).map { minute ->
-                    val (guardId, count) = countersByGuard.maxBy { (_, minutes) -> minutes[minute] }
-                            ?.let {(guardId, minutes) ->
-                                guardId to minutes[minute]
-                            } ?: throw Exception("max value not found")
-                    if(count > maxCount){
-                        maxCount = count
-                        mostAsleepGuardId = guardId
-                        mostProbableMinute = minute
-                    }
-                }
-            }
-    return mostAsleepGuardId to mostProbableMinute
+    return countByGuard.mapValues { (guardId, sleeps) ->
+        GuardSleeps(guardId, sleeps.mapIndexed { idx, sleepCount ->
+            GuardSleepInfo(
+                    minute = idx,
+                    count = sleepCount,
+                    isMax = mostAsleepByMinute[idx] == guardId
+            )
+        }.toTypedArray())
+    }
 }
+
+
+fun findMostAsleepByMinute(guardSleeps: Map<Int, Array<Int>>): List<Int> {
+    return (0 until 60).map { minute ->
+        guardSleeps
+                .map { (guardId, sleeps) -> guardId to sleeps[minute] }
+                .maxBy { it.second }
+                ?.first ?: 0
+    }
+}
+
+//fun getMostAsleepGuard(entries: List<LogEntry>): Pair<Int, Int> {
+//    var maxCount = 0
+//    var mostAsleepGuardId = 0
+//    var mostProbableMinute = 0
+//    getSleepsByGuard(entries)
+//            .also { countersByGuard ->
+//                (0 until 60).map { minute ->
+//                    val (guardId, count) = countersByGuard.maxBy { (_, minutes) -> minutes[minute] }
+//                            ?.let { (guardId, minutes) ->
+//                                guardId to minutes[minute]
+//                            } ?: throw Exception("max value not found")
+//                    if (count > maxCount) {
+//                        maxCount = count
+//                        mostAsleepGuardId = guardId
+//                        mostProbableMinute = minute
+//                    }
+//                }
+//            }
+//    return mostAsleepGuardId to mostProbableMinute
+//}
+
 
 //fun resolvePuzzlePart2(entries:List<LogEntry>):List
