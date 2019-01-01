@@ -43,6 +43,8 @@ dependencies {
     implementation("no.tornado:tornadofx:1.7.17")
 
     implementation("com.github.ajalt:mordant:1.2.0")
+
+    testImplementation("org.amshove.kluent:kluent:1.45")
 }
 
 application {
