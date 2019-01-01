@@ -28,3 +28,17 @@ fun process(polymer: String): String {
 
 fun resolvePart1(file: File = File("../input", "day5.txt")): String =
         process(file.readText())
+
+fun processByChar(polymer: String, filterRange: CharRange = 'a'..'z'): Map<Char, String> =
+        filterRange.map { char ->
+            val regex = Regex("[$char${char.toUpperCase()}]")
+            val newPolymer = polymer.replace(regex, "")
+            char to process(newPolymer)
+        }.toMap()
+
+fun resolvePart2(file: File = File("../input", "day5.txt")): Int =
+        processByChar(file.readText())
+                .values
+                .map { it.count() }
+                .min()
+                ?: 0
