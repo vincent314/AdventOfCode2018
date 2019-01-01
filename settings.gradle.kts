@@ -1,1 +1,1 @@
-include("adventofcode","microservice","webapp")
+include("adventofcode","microservice")
