@@ -53,4 +53,17 @@ class Day6Test {
         val grid = readGrid(File("../input","day6.txt"))
         grid.largestAreaSize shouldEqual 3569
     }
+
+    @Test
+    fun testResolveExamplePart2(){
+        val grid = readGrid(File("../input", "day6-example.txt"), 32)
+        grid.get(4,3).weight shouldEqual 30
+        grid.safeZoneSize shouldEqual 16
+    }
+
+    @Test
+    fun testResolvePart2(){
+        val grid = readGrid(File("../input", "day6.txt"))
+        grid.safeZoneSize shouldEqual 48978
+    }
 }

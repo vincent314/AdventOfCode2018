@@ -7,16 +7,26 @@ data class Point(
         val x: Int,
         val y: Int,
         var destinationId: Int? = null,
-        var closestId: Int? = null
+        var closestId: Int? = null,
+        var weight: Int? = null
 ) {
     infix fun distance(other: Point): Int {
         return (other.x - x).absoluteValue + (other.y - y).absoluteValue
     }
 }
 
-class Grid(val width: Int, val height: Int, val destinations: List<Point> = listOf()) {
+class Grid(val width: Int, val height: Int, val destinations: List<Point> = listOf(), val threshold: Int = 10000) {
     val points = Array(height) { y ->
         Array(width) { x -> Point(x, y) }
+    }
+
+    init {
+        destinations.forEach {
+            points[it.y][it.x] = it
+            it.closestId = it.destinationId
+        }
+        findClosest()
+        computeAllPointsWeight()
     }
 
     val excludeIds
@@ -39,13 +49,8 @@ class Grid(val width: Int, val height: Int, val destinations: List<Point> = list
                 .max()
                 ?: 0
 
-    init {
-        destinations.forEach {
-            points[it.y][it.x] = it
-            it.closestId = it.destinationId
-        }
-        findClosest()
-    }
+    val safeZoneSize
+        get(): Int = points.flatten().map { it.weight ?: Int.MAX_VALUE }.count { it < threshold }
 
     override fun toString(): String {
         return points.map { rows ->
@@ -62,6 +67,14 @@ class Grid(val width: Int, val height: Int, val destinations: List<Point> = list
 
     fun get(x: Int, y: Int): Point = points[y][x]
 
+    fun computeAllPointsWeight() {
+        points.flatten().forEach { point ->
+            point.weight = computeWeight(point)
+        }
+    }
+
+    fun computeWeight(point: Point) = destinations.map { point distance it }.sum()
+
 }
 
 fun readPoints(lines: List<String>): List<Point> {
@@ -72,11 +85,11 @@ fun readPoints(lines: List<String>): List<Point> {
     }
 }
 
-fun readGrid(file: File = File("input", "day6.txt")): Grid {
+fun readGrid(file: File = File("input", "day6.txt"), threshold: Int = 10000): Grid {
     val destinations = readPoints(file.readLines())
 
     val width = (destinations.map(Point::x).max() ?: 0) + 1
     val height = (destinations.map(Point::y).max() ?: 0) + 1
 
-    return Grid(width, height, destinations)
+    return Grid(width, height, destinations, threshold)
 }
