@@ -19,13 +19,32 @@ class Grid(val width: Int, val height: Int, val destinations: List<Point> = list
         Array(width) { x -> Point(x, y) }
     }
 
-    val excludeIds = mutableSetOf<Int>()
+    val excludeIds
+        get():Set<Int> = listOf(
+                (0 until width).map { x -> get(x, 0) }, // top line
+                (0 until width).map { x -> get(x, height - 1) }, // bottom line
+                (0 until height).map { y -> get(0, y) }, // left line
+                (0 until height).map { y -> get(width - 1, y) } // right line
+        )
+                .flatten()
+                .mapNotNull(Point::closestId)
+                .toSet()
+
+    val largestAreaSize
+        get(): Int = points.flatten()
+                .groupBy(Point::closestId)
+                .filterNot { it.key in excludeIds }
+                .mapValues { (_, pointList) -> pointList.count() }
+                .values
+                .max()
+                ?: 0
 
     init {
         destinations.forEach {
             points[it.y][it.x] = it
             it.closestId = it.destinationId
         }
+        findClosest()
     }
 
     override fun toString(): String {
@@ -43,17 +62,6 @@ class Grid(val width: Int, val height: Int, val destinations: List<Point> = list
 
     fun get(x: Int, y: Int): Point = points[y][x]
 
-    fun filterOpenArea() {
-        listOf(
-                (0 until width).map { x -> get(x, 0) }, // top line
-                (0 until width).map { x -> get(x, height - 1) }, // bottom line
-                (0 until height).map { y -> get(0, y) }, // left line
-                (0 until height).map { y -> get(width - 1, y) } // right line
-        )
-
-        excludeIds.addAll(points[0].mapNotNull(Point::closestId).distinct())
-        excludeIds.addAll(points[0].mapNotNull(Point::closestId).distinct())
-    }
 }
 
 fun readPoints(lines: List<String>): List<Point> {

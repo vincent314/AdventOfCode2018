@@ -3,6 +3,7 @@ package AdventOfCode2018.day6
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
+import java.io.File
 
 class Day6Test {
 
@@ -36,14 +37,20 @@ class Day6Test {
 
         Grid(10, 10, destinations).toString() shouldEqual """
             |··········
-            |·0····1···
+            |·0········
             |··········
-            |····3·····
-            |··········
+            |········2·
+            |···3······
             |·····4····
+            |·1········
             |··········
             |··········
-            |···2·····5
-            |··········""".trimMargin()
+            |········5·""".trimMargin()
+    }
+
+    @Test
+    fun testResolvePart1() {
+        val grid = readGrid(File("../input","day6.txt"))
+        grid.largestAreaSize shouldEqual 3569
     }
 }
