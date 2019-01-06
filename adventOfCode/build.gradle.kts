@@ -47,6 +47,8 @@ dependencies {
     implementation("com.github.ajalt:mordant:1.2.0")
 
     testImplementation("org.amshove.kluent:kluent:1.45")
+
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.9.7")
 }
 
 application {
