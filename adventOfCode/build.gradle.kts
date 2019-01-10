@@ -48,7 +48,10 @@ dependencies {
 
     testImplementation("org.amshove.kluent:kluent:1.45")
 
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.9.7")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.9.8")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.8")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.9.8")
+
 }
 
 application {

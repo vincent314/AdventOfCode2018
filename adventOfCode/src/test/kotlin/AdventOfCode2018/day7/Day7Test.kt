@@ -8,22 +8,33 @@ class Day7Test {
 
     @Test
     fun testReadFileExample() {
-        val vertices = readFile(File("../input", "day7.txt"))
+        val vertices = readFile(File("../input", "day7-example.txt"))
 
-        vertices.values.forEach { println(it.toString()) }
+        vertices.values.joinToString("\n") shouldEqual """ <-- C --> A, F
+                                                            |C <-- A --> B, D
+                                                            |C <-- F --> E
+                                                            |A <-- B --> E
+                                                            |A <-- D --> E
+                                                            |B, D, F <-- E --> """.trimMargin()
     }
 
     @Test
-    fun testBuildSequenceExample(){
+    fun testBuildSequenceExample() {
         val vertices = readFile(File("../input", "day7-example.txt"))
 
         getSequence(vertices) shouldEqual "CABDFE"
     }
 
     @Test
-    fun testResolvePart1(){
+    fun testResolvePart1() {
         val vertices = readFile(File("../input", "day7.txt"))
 
-        getSequence(vertices) shouldEqual "BMOHTUFQZLCKPVRXWINAJDYESG"
+        val sequence = getSequence(vertices)
+        sequence
+                .asSequence()
+                .map(vertices::get)
+                .forEach(::println)
+
+        sequence shouldEqual "BMOHTUFQZLCKPVRXWINAJDYESG"
     }
 }

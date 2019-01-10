@@ -1,11 +1,15 @@
 package AdventOfCode2018.day2
 
+import AdventOfCode2018.Solutions
 import org.junit.Test
+import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class Day2Test {
+
+    val solutions = Solutions.readFile().day2
 
     @Test
     fun testCount() {
@@ -47,8 +51,8 @@ class Day2Test {
 
     @Test
     fun testPuzzlePart1() {
-        val result = hash(readFile())
-        assertEquals(5928, result)
+        val result = hash(readFile(File("../input","day2.txt")))
+        assertEquals(solutions.part1, result)
     }
 
     @Test
@@ -73,13 +77,13 @@ class Day2Test {
     }
 
     @Test
-    fun testCommonChars(){
-        assertEquals("fgij",commonChars("fghij" to "fguij"))
+    fun testCommonChars() {
+        assertEquals("fgij", commonChars("fghij" to "fguij"))
     }
 
     @Test
-    fun testPuzzlePart2(){
-        val result = commonChars(findCloseIds(readFile()).first())
-        assertEquals("bqlporuexkwzyabnmgjqctvfs", result)
+    fun testPuzzlePart2() {
+        val result = commonChars(findCloseIds(readFile(File("../input","day2.txt"))).first())
+        assertEquals(solutions.part2, result)
     }
 }

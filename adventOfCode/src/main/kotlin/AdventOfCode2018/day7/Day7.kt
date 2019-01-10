@@ -32,8 +32,8 @@ fun readFile(file: File = File("input", "day7.txt")): Map<Char, Vertex> {
             .forEach { (from, to) ->
                 val fromVertex = vertices.getOrPut(from) { Vertex(from) }
                 val toVertex = vertices.getOrPut(to) { Vertex(to) }
-                fromVertex.next.add(toVertex)
-                toVertex.previous.add(fromVertex)
+                fromVertex.next += toVertex
+                toVertex.previous += fromVertex
             }
     return vertices.toMap()
 }
