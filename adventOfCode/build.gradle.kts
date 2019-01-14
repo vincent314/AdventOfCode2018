@@ -1,3 +1,4 @@
+import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /*
@@ -12,14 +13,23 @@ plugins {
 
     // Apply the application to add support for building a CLI application
     application
+    id("com.github.johnrengelman.shadow").version("2.0.1")
 }
 
-tasks.withType<KotlinCompile>{
-    kotlinOptions{
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
         jvmTarget = "1.8"
     }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("com.github.jengelman.gradle.plugins:shadow:2.0.1")
+    }
+}
 //compileKotlin {
 //    kotlinOptions.jvmTarget= 1.8
 //}
@@ -57,4 +67,10 @@ dependencies {
 application {
     // Define the main class for the application
     mainClassName = "AdventOfCode2018.AppKt"
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes("Main-Class" to "AdventOfCode2018.AppKt")
+    }
 }

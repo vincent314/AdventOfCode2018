@@ -3,6 +3,8 @@
  */
 package AdventOfCode2018
 
+import AdventOfCode2018.day9.play
+
 class App {
     val greeting: String
         get() {
@@ -11,5 +13,5 @@ class App {
 }
 
 fun main(args: Array<String>) {
-    println(App().greeting)
+    println(play(459,7_132_000).max())
 }

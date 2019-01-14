@@ -13,6 +13,7 @@ class Solutions {
     var day1 = Day<Long, Long>()
     var day2 = Day<Int, String>()
     var day8 = Day<Int, Int>()
+    var day9 = Day<Int, Int>()
 
     companion object {
         fun readFile():Solutions{
