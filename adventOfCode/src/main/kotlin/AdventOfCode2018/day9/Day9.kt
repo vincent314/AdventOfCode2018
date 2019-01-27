@@ -1,58 +1,110 @@
 package AdventOfCode2018.day9
 
 import java.util.*
-import kotlin.collections.ArrayList
 
-class Circle(
-        val marbles: MutableList<Int> = mutableListOf(0),
-        var current: Int = 0
-) {
+class Deque(collection: Collection<Int>) : LinkedList<Int>(collection) {
 
-    constructor(current: Int, vararg marbles: Int) : this(marbles.toMutableList(), current)
+    constructor() : this(listOf())
 
-    val newIndex: Int
-        get() = (current + 1) % marbles.size + 1
+    constructor(vararg values: Int) : this(values.toList())
 
-    infix fun add(marble: Int): Int {
-        return if (marble % 23 == 0) {
-            current -= 7
-            if (current < 0) current += marbles.size
-            val removeMarble = marbles[current]
-            marbles.removeAt(current)
-//            println("Found %23 at marble $marble, remove marble $removeMarble")
-            marble + removeMarble
-        } else {
-            val i = newIndex
-            marbles.add(i, marble)
-            current = i
-            0
-        }
+    fun appendAfter(vararg values: Int) {
+        values.forEach { this.addLast(it) }
     }
 
-    override fun toString(): String =
-            marbles.mapIndexed { idx, marble ->
-                if (idx == current) "($marble)" else " $marble "
-            }.joinToString("")
+    fun removeAfter(cutIndex: Int): List<Int> {
+        return (cutIndex until this.size).map { this.removeLast() }
+    }
+
+    fun appendBefore(vararg values: Int) {
+        values.forEach { this.push(it) }
+    }
+
+    fun removeBefore(cutIndex: Int): List<Int> {
+        return (0 until cutIndex).map { this.pollFirst() }
+    }
+}
+
+class Circle(
+        marbles: List<Int> = listOf(0),
+        var current: Int = 0
+) {
+    constructor(current: Int, vararg marbles: Int) : this(marbles.toMutableList(), current)
+
+    var counterClockWise: Deque = Deque(marbles.slice(0 until current))
+    var clockWise: Deque = Deque(marbles.slice(current until marbles.size))
+
+    val newIndex: Int
+        get() = (current + 1) % size + 1
+    val newIndex23: Int
+        get() {
+            val i = current - 7
+            return if (i < 0) i + size else i
+        }
+    val size: Int
+        get() = counterClockWise.size + clockWise.size
+
+    infix fun add(marble: Int): Int {
+        if (marble % 23 == 0) {
+            val index = newIndex23
+            val bonusMarble = if (index > counterClockWise.size) {
+                val cutIdx = index - counterClockWise.size + 1
+                val transfert = clockWise.removeBefore(cutIdx)
+                counterClockWise.appendAfter(*transfert.subList(0, transfert.size - 1).toIntArray())
+                transfert.last()
+            } else {
+                val transfert = counterClockWise.removeAfter(index)
+                clockWise.appendBefore(*transfert.subList(0, transfert.size - 1).toIntArray())
+                transfert.last()
+            }
+            current = index
+            return marble + bonusMarble
+        } else {
+            val index = newIndex
+            if (index > counterClockWise.size) {
+                val cutIdx = index - counterClockWise.size
+                val transfert = clockWise.removeBefore(cutIdx)
+                counterClockWise.appendAfter(*transfert.toIntArray())
+                clockWise.appendBefore(marble)
+            } else {
+                val transfert = counterClockWise.removeAfter(index)
+                clockWise.appendBefore(*transfert.toIntArray(), marble)
+            }
+            current = index
+            return 0
+        }
+
+    }
+
+    override fun toString(): String {
+        fun listToString(list: List<Int>): String {
+            return list.map { " $it " }.joinToString("")
+        }
+
+        return listToString(counterClockWise) + "(${clockWise.first()})" + listToString(clockWise.subList(1, clockWise.size))
+
+    }
 
 }
 
-fun play(input: String, factor:Int = 1): Array<Int> {
+
+fun play(input: String, factor: Int = 1): Array<Long> {
     val (nbPlayers, nbMarbles) = Regex("(\\d+) players; last marble is worth (\\d+) points").matchEntire(input)
             ?.destructured!!
     println("Starting game : $nbPlayers players and $nbMarbles marbles")
-    return play(nbPlayers.toInt(),nbMarbles.toInt() * factor)
+    return play(nbPlayers.toInt(), nbMarbles.toInt() * factor)
 }
 
-fun play(nbPlayers: Int, nbMarbles: Int): Array<Int> {
+fun play(nbPlayers: Int, nbMarbles: Int): Array<Long> {
     val start = Date().time
-    val circle = Circle(marbles = ArrayList<Int>(nbMarbles).apply { add(0) })
-    val scores = Array(nbPlayers) { 0 }
+    val circle = Circle(marbles = listOf(0))
+    val scores = Array(nbPlayers) { 0L }
     for (marble in 1..nbMarbles) {
         val player = (marble - 1) % nbPlayers
-        scores[player] += circle.add(marble)
+        scores[player] += circle.add(marble).toLong()
 //        print("[${player}] ")
 //        println(circle)
-        if(marble % 100_000 == 0){
+        if (marble % 100_000 == 0) {
             println("Marble : $marble")
         }
     }
