@@ -53,6 +53,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
     implementation("no.tornado:tornadofx:1.7.17")
+    implementation("io.data2viz:d2v-data2viz-jfx:0.7.2-RC1")
+    implementation("io.data2viz:d2v-data2viz-common:0.7.2-RC1")
 
     implementation("com.github.ajalt:mordant:1.2.0")
 
