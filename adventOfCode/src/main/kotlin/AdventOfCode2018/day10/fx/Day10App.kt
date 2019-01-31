@@ -1,4 +1,4 @@
-package AdventOfCode2018.day10
+package AdventOfCode2018.day10.fx
 
 import javafx.stage.Stage
 import tornadofx.App

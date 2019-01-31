@@ -1,14 +1,13 @@
 package AdventOfCode2018.day10.viz
 
-import AdventOfCode2018.day10.SkyPresenter
+import AdventOfCode2018.day10.common.Sky
 import io.data2viz.color.Colors
 import io.data2viz.geom.Size
 import io.data2viz.scale.Scales
 import io.data2viz.viz.viz
 
-fun skyViz(skyPresenter: SkyPresenter, canvasWidth: Double, canvasHeight: Double) =
+fun skyViz(sky: Sky, canvasWidth: Double, canvasHeight: Double) =
         viz {
-            val sky = skyPresenter.sky
             val zoom = 150.0
 
             val scale = Scales.Continuous.linear {
@@ -29,11 +28,11 @@ fun skyViz(skyPresenter: SkyPresenter, canvasWidth: Double, canvasHeight: Double
             val stepText = text {
                 x = 50.0
                 y = 50.0
-                textContent = "Step ${skyPresenter.current}"
+                textContent = "Step ${sky.current}"
             }
 
-            animation() {
-                stepText.textContent = "Step ${skyPresenter.current}"
+            animation {
+                stepText.textContent = "Step ${sky.current}"
                 rects.forEachIndexed { index, rectNode ->
                     val (px, py) = sky.points[index].position
                     rectNode.x = scale(px.toDouble())

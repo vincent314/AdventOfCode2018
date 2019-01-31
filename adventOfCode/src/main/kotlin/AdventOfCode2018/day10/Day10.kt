@@ -1,5 +1,6 @@
 package AdventOfCode2018.day10
 
+import AdventOfCode2018.day10.common.Point
 import java.io.File
 
 typealias Coord = Pair<Int, Int>
