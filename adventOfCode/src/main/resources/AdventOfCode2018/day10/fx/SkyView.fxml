@@ -12,9 +12,8 @@
    <bottom>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#onPrevious" text="Previous" />
-            <TextField fx:id="stepTextField" onAction="#onStepInputChange" />
-            <Button mnemonicParsing="false" onAction="#onNext" text="Next" />
+            <ScrollBar fx:id="stepScroll" max="12000.0" min="9000.0" prefHeight="17.0" prefWidth="577.0" value="10000.0" />
+            <Label fx:id="stepLabel" text="Label" />
          </children>
       </HBox>
    </bottom>

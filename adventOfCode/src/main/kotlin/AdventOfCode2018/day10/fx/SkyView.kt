@@ -4,11 +4,12 @@ import AdventOfCode2018.day10.common.Sky
 import AdventOfCode2018.day10.readFile
 import AdventOfCode2018.day10.viz.skyViz
 import io.data2viz.viz.JFxVizRenderer
-import javafx.event.ActionEvent
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.canvas.Canvas
-import javafx.scene.control.TextField
+import javafx.scene.control.Label
+import javafx.scene.control.ScrollBar
 import javafx.scene.layout.BorderPane
-import tornadofx.View
+import tornadofx.*
 import java.io.File
 
 class SkyView : View() {
@@ -16,26 +17,28 @@ class SkyView : View() {
 
     private val skyCanvas: Canvas by fxid()
 
+    private val stepScroll: ScrollBar by fxid()
+
+    private val stepLabel: Label by fxid()
+
+    private val startStep = 10000
+
     val sky = Sky(readFile(File("input", "day10.txt")))
+            .also {
+                it.setAt(startStep)
+            }
+
+    val stepProperty = SimpleIntegerProperty(startStep)
 
     init {
         JFxVizRenderer(skyCanvas, skyViz(sky, skyCanvas.width, skyCanvas.height))
                 .startAnimations()
-    }
 
-    fun onNext() {
-        sky.next()
-    }
+        stepScroll.valueProperty().bindBidirectional(stepProperty)
+        stepLabel.bind(stepProperty)
 
-    fun onPrevious() {
-        sky.previous()
-    }
-
-    fun onStepInputChange(event: ActionEvent) {
-        if(event.source is TextField){
-            (event.source as TextField).text.toIntOrNull()
-                    ?.also { sky.setAt(it) }
+        stepProperty.onChange { step ->
+            sky.setAt(step)
         }
     }
-
 }
