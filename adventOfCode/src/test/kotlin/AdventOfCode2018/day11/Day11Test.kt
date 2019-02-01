@@ -42,4 +42,14 @@ class Day11Test {
     }
 
 
+    @Test
+    fun `should get battery max power`(){
+        Battery(18).maxPowerCoord shouldEqual (33 to 45)
+        Battery(42).maxPowerCoord shouldEqual (21 to 61)
+    }
+
+    @Test
+    fun `should resolve part1`(){
+        Battery(7347).maxPowerCoord shouldEqual (243 to 17)
+    }
 }

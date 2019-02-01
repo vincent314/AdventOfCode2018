@@ -3,7 +3,6 @@ package AdventOfCode2018.day11.viz
 import AdventOfCode2018.day11.Battery
 import io.data2viz.color.Colors
 import io.data2viz.geom.Size
-import io.data2viz.scale.Scale
 import io.data2viz.scale.Scales
 import io.data2viz.scale.ScalesChromatic
 import io.data2viz.viz.viz
@@ -22,7 +21,7 @@ fun batteryViz(battery: Battery, canvasWidth: Double, canvasHeight: Double) = vi
 
     for (py in 0 until battery.size) {
         for (px in 0 until battery.size) {
-            val powerLevel = battery.data[py][px]
+            val powerLevel = battery.get(px, py)
             rect {
                 x = scale(px.toDouble())
                 y = scale(py.toDouble())
