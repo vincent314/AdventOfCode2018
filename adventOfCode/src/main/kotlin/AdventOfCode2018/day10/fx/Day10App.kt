@@ -1,14 +1,8 @@
 package AdventOfCode2018.day10.fx
 
-import javafx.stage.Stage
-import tornadofx.App
-import tornadofx.launch
+import tornadofx.*
 
-class Day10App : App(SkyView::class) {
-  override fun start(stage: Stage) {
-    super.start(stage)
-  }
-}
+class Day10App : App(SkyView::class)
 
 fun main() {
   launch<Day10App>()
