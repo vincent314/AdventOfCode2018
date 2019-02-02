@@ -1,6 +1,6 @@
 package adventofcode
 
-import AdventOfCode2018.day4.*
+import adventofcode2018.day4.*
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 

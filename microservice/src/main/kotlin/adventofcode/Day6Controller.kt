@@ -1,7 +1,7 @@
 package adventofcode
 
-import AdventOfCode2018.day6.Grid
-import AdventOfCode2018.day6.readGrid
+import adventofcode2018.day6.Grid
+import adventofcode2018.day6.readGrid
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import java.io.File

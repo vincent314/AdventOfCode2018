@@ -68,11 +68,11 @@ dependencies {
 
 application {
     // Define the main class for the application
-    mainClassName = "AdventOfCode2018.AppKt"
+    mainClassName = "adventofcode2018.AppKt"
 }
 
 tasks.withType<Jar> {
     manifest {
-        attributes("Main-Class" to "AdventOfCode2018.AppKt")
+        attributes("Main-Class" to "adventofcode2018.AppKt")
     }
 }

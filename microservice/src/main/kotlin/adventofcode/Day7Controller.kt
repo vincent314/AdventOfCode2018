@@ -1,7 +1,7 @@
 package adventofcode
 
-import AdventOfCode2018.day7.getSequence
-import AdventOfCode2018.day7.readFile
+import adventofcode2018.day7.getSequence
+import adventofcode2018.day7.readFile
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import java.io.File

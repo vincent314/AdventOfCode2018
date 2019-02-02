@@ -1,6 +1,6 @@
 package adventofcode
 
-import AdventOfCode2018.day9.Circle
+import adventofcode2018.day9.Circle
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 
