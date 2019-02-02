@@ -11,4 +11,4 @@ day9:
   part1: 375414
   part2: 3168033673
 day11:
-  part1: "(243, 17, 31)"
+  part1: "MaxPowerCell(x=243, y=17, power=31, level=3)"

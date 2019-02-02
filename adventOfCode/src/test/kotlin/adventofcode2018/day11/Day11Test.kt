@@ -47,13 +47,25 @@ class Day11Test {
 
     @Test
     fun `should get battery max power`() {
-        MaxPowerMatrix(Battery(18)).maxPowerCoord shouldEqual Triple(33, 45, 29)
-        MaxPowerMatrix(Battery(42)).maxPowerCoord shouldEqual Triple(21, 61, 30)
+        MaxPowerMatrix(Battery(18)).maxPowerCell shouldEqual MaxPowerCell(33, 45, 29)
+        MaxPowerMatrix(Battery(42)).maxPowerCell shouldEqual MaxPowerCell(21, 61, 30)
     }
 
     @Test
     fun `should resolve part1`() {
         val serialNumber = File("../input", "day11.txt").readText().toLong()
-        MaxPowerMatrix(Battery(serialNumber)).maxPowerCoord.toString() shouldEqual solution.part1
+        MaxPowerMatrix(Battery(serialNumber)).maxPowerCell.toString() shouldEqual solution.part1
+    }
+
+    @Test
+    fun `should find max power with level`() {
+        MaxPowerMatrix.getMaxPowerSquare(18) shouldEqual MaxPowerCell(90, 269, 113, 16)
+        MaxPowerMatrix.getMaxPowerSquare(42) shouldEqual MaxPowerCell(232, 251, 119, 12)
+    }
+
+    @Test
+    fun `should resolve part2`(){
+        val serialNumber = File("../input", "day11.txt").readText().toLong()
+        MaxPowerMatrix.getMaxPowerSquare(serialNumber) shouldEqual MaxPowerCell(233,228,91,12)
     }
 }
