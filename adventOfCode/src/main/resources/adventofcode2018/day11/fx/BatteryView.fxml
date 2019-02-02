@@ -5,15 +5,15 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="310.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Power">
                <content>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane prefHeight="284.0" prefWidth="392.0">
                      <content>
-                        <Canvas fx:id="batteryCanvas" height="488.0" width="598.0" />
+                        <Canvas fx:id="batteryCanvas" height="300.0" width="300.0" />
                      </content>
                   </ScrollPane>
                </content>
@@ -22,7 +22,7 @@
                <content>
                   <ScrollPane prefHeight="200.0" prefWidth="200.0">
                      <content>
-                        <Canvas fx:id="totalSquareCanvas" height="426.0" width="599.0" />
+                        <Canvas fx:id="totalSquareCanvas" height="300.0" width="300.0" />
                      </content>
                   </ScrollPane>
                </content>
@@ -31,7 +31,7 @@
       </TabPane>
    </center>
    <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="57.0" prefWidth="464.0" BorderPane.alignment="CENTER">
          <children>
             <ScrollBar fx:id="levelScroll" max="300.0" prefHeight="17.0" prefWidth="275.0" value="3.0" />
             <Label fx:id="levelLabel" text="Label" />

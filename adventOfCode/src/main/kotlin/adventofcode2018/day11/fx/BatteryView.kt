@@ -30,14 +30,14 @@ class BatteryView : View() {
         levelScroll.valueProperty().bindBidirectional(levelProperty)
         levelLabel.bind(levelProperty)
 
-        JFxVizRenderer(batteryCanvas, batteryViz(battery, batteryCanvas.width))
+        JFxVizRenderer(batteryCanvas, batteryViz(battery))
                 .render()
 
-        JFxVizRenderer(totalSquareCanvas, totalSquareViz(battery, totalSquareCanvas.width, levelProperty.get()))
+        JFxVizRenderer(totalSquareCanvas, totalSquareViz(battery, levelProperty.get()))
                 .render()
 
         levelProperty.onChange { level ->
-            JFxVizRenderer(totalSquareCanvas, totalSquareViz(battery, totalSquareCanvas.width, level))
+            JFxVizRenderer(totalSquareCanvas, totalSquareViz(battery, level))
                     .render()
         }
     }

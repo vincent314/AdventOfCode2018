@@ -7,10 +7,10 @@ import io.data2viz.scale.Scales
 import io.data2viz.scale.ScalesChromatic
 import io.data2viz.viz.viz
 
-fun batteryViz(battery: Battery, canvasWidth: Double) = viz {
+fun batteryViz(battery: Battery) = viz {
     val scale = Scales.Continuous.linear {
         domain = listOf(0.0, battery.size.toDouble())
-        range = listOf(0.0, canvasWidth)
+        range = listOf(0.0, 300.0)
     }
 
     val gradient = ScalesChromatic.Continuous.linearRGB {
@@ -18,14 +18,13 @@ fun batteryViz(battery: Battery, canvasWidth: Double) = viz {
         range = listOf(Colors.Web.blue, Colors.Web.red)
     }
 
-
     for (py in 0 until battery.size) {
         for (px in 0 until battery.size) {
             val powerLevel = battery.get(px, py)
             rect {
                 x = scale(px.toDouble())
                 y = scale(py.toDouble())
-                size = Size(scale(1.0), scale(1.0))
+                size = Size(1.0,1.0)
                 fill = gradient(powerLevel)
             }
         }

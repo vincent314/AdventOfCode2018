@@ -8,13 +8,13 @@ import io.data2viz.scale.Scales
 import io.data2viz.scale.ScalesChromatic
 import io.data2viz.viz.viz
 
-fun totalSquareViz(battery: Battery, canvasWidth: Double, level:Int) = viz {
+fun totalSquareViz(battery: Battery, level:Int) = viz {
     val maxPowerMatrix = MaxPowerMatrix(battery,level).data
     val matrixSize = Math.sqrt(maxPowerMatrix.size.toDouble())
 
     val scale = Scales.Continuous.linear {
         domain = listOf(0.0, matrixSize)
-        range = listOf(0.0, canvasWidth)
+        range = listOf(0.0, 300.0)
     }
 
     val gradient = ScalesChromatic.Continuous.linearRGB {
