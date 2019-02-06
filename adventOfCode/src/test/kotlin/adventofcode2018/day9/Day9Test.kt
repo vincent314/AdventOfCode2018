@@ -1,6 +1,6 @@
 package adventofcode2018.day9
 
-import adventofcode2018.Solutions
+import adventofcode2018.solutions
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
@@ -8,7 +8,7 @@ import java.io.File
 
 class Day9Test {
 
-    val solution = Solutions.readFile().day9
+    val solution = solutions().day9
 
     @Test
     fun testNewIndex() {
@@ -129,7 +129,7 @@ class Day9Test {
                 "  37  87  15  88  38  89"
 
         val input = state.split(Regex("\\s+")).map(String::toInt)
-        val circle = Circle(input,3)
+        val circle = Circle(input, 3)
         val score = circle.add(92)
         score shouldEqual 92 + 15
         circle.toString() shouldEqual " 0  90  39  91  16  40  8  41  42  4  47  43  48  18  49  44  50  19  51  45  52  2  " +
@@ -139,16 +139,16 @@ class Day9Test {
     }
 
     @Test
-    fun `should add marbles at begining or end`(){
-        var circle = Circle(0,0,1,2,3)
+    fun `should add marbles at begining or end`() {
+        var circle = Circle(0, 0, 1, 2, 3)
         circle.add(4)
         circle.toString() shouldEqual " 0  1 (4) 2  3 "
 
-        circle = Circle(5, 0,1,2,3,4,5)
+        circle = Circle(5, 0, 1, 2, 3, 4, 5)
         circle.add(6)
         circle.toString() shouldEqual " 0 (6) 1  2  3  4  5 "
 
-        circle = Circle(0, 0,1,2,3,4,5,6,7,8,9,10)
+        circle = Circle(0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         circle.add(23)
         circle.toString() shouldEqual " 0  1  2  3 (5) 6  7  8  9  10 "
     }

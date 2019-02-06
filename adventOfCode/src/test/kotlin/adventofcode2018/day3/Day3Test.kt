@@ -1,6 +1,7 @@
 package adventofcode2018.day3
 
 import org.junit.Test
+import java.io.File
 import kotlin.test.assertEquals
 
 class Day3Test {
@@ -63,7 +64,7 @@ class Day3Test {
     @Test
     fun testPuzzlePart1And2(){
         val fabric = Fabric()
-        fabric.readFile()
+        fabric.readFile(File("../input", "day3.txt"))
         assertEquals(110383,fabric.countOverlaps())
         assertEquals(1,fabric.nonOverlapIds.size)
         assertEquals("129",fabric.nonOverlapIds.first())

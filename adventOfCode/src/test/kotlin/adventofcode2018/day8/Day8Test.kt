@@ -1,6 +1,7 @@
 package adventofcode2018.day8
 
 import adventofcode2018.Solutions
+import adventofcode2018.solutions
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
@@ -8,7 +9,7 @@ import org.junit.Test
 class Day8Test {
 
     val example = "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2"
-    val solutions = Solutions.readFile().day8
+    val solution = solutions().day8
 
     @Test
     fun testExample() {
@@ -36,7 +37,7 @@ class Day8Test {
     @Test
     fun testResolvePart1() {
         val root = parseInput()
-        root.doSum() shouldEqual solutions.part1
+        root.doSum() shouldEqual solution.part1
     }
 
     @Test
@@ -48,6 +49,6 @@ class Day8Test {
     @Test
     fun testResolvePart2(){
         val root = parseInput()
-        root.doSumPart2() shouldEqual solutions.part2
+        root.doSumPart2() shouldEqual solution.part2
     }
 }

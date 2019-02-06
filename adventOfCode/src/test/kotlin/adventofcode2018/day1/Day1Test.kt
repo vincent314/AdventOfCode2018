@@ -1,12 +1,12 @@
 package adventofcode2018.day1
 
-import adventofcode2018.Solutions
+import adventofcode2018.solutions
 import org.junit.Test
 import java.io.File
 import kotlin.test.assertEquals
 
 class Day1Test {
-    val solutions = Solutions.readFile().day1
+    val solution = solutions().day1
 
     @Test
     fun testReadFile() {
@@ -26,7 +26,7 @@ class Day1Test {
     fun testPuzzlePart1() {
         val frequencies = readFile(File("../input", "day1.txt"))
         val result = calibrate(frequencies)
-        assertEquals(solutions.part1, result)
+        assertEquals(solution.part1, result)
     }
 
     @Test
@@ -37,9 +37,9 @@ class Day1Test {
     }
 
     @Test
-    fun testPuzzlePart2(){
+    fun testPuzzlePart2() {
         val frequencies = readFile(File("../input", "day1.txt"))
         val result = findTwice(frequencies)
-        assertEquals(solutions.part2,result)
+        assertEquals(solution.part2, result)
     }
 }

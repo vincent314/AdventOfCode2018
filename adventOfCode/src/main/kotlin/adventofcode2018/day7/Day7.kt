@@ -24,7 +24,7 @@ fun String.parseInstruction(): Pair<Char, Char> {
     return from.first() to to.first()
 }
 
-fun readFile(file: File = File("input", "day7.txt")): Map<Char, Vertex> {
+fun readFile(file: File = File("input", "day7.txt")): MutableMap<Char, Vertex> {
     val vertices: MutableMap<Char, Vertex> = mutableMapOf()
     file.readLines()
             .asSequence()
@@ -35,31 +35,24 @@ fun readFile(file: File = File("input", "day7.txt")): Map<Char, Vertex> {
                 fromVertex.next += toVertex
                 toVertex.previous += fromVertex
             }
-    return vertices.toMap()
+    return vertices
 }
 
-
-fun getSequence(vertices: Map<Char, Vertex>): String {
-    val values = vertices.values.filter { it.previous.isEmpty() }
-    val set = TreeSet<Vertex>().also { it += values }
-    val root = Vertex(' ', set)
-
-    return getSequence(root).joinToString("").trim()
+fun Map<Char, Vertex>.available() = this.values.filter { it.previous.isEmpty() }.sorted()
+fun MutableMap<Char, Vertex>.complete(vertex: Vertex) {
+    values.forEach { it.previous.remove(vertex) }
+    remove(vertex.value)
 }
 
-fun getSequence(vertex: Vertex, sequence: MutableList<Char> = mutableListOf()): MutableList<Char> {
-    if(vertex.value in sequence){
-        println("—— vertex ${vertex.value} already exists")
-        return sequence
+fun getSequence(vertices: MutableMap<Char, Vertex>): String {
+    var availableList = vertices.available()
+    val sequence: MutableList<Vertex> = mutableListOf()
+
+    while (availableList.isNotEmpty()) {
+        val vertex = availableList.first()
+        sequence += vertex
+        vertices.complete(vertex)
+        availableList = vertices.available()
     }
-    sequence += vertex.value
-    vertex.next.forEach { next ->
-        val allConditionsOK = next.previous.fold(true) { agg, previous ->
-            agg && previous.value in sequence
-        }
-        if (allConditionsOK) {
-            getSequence(next, sequence)
-        }
-    }
-    return sequence
+    return sequence.map { it.value }.joinToString("")
 }

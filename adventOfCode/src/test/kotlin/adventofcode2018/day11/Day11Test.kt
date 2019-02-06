@@ -1,13 +1,14 @@
 package adventofcode2018.day11
 
 import adventofcode2018.Solutions
+import adventofcode2018.solutions
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
 import java.io.File
 
 class Day11Test {
-    val solution = Solutions.readFile().day11
+    val solution = solutions().day11
 
     @Test
     fun `should init a cell`() {
@@ -64,8 +65,8 @@ class Day11Test {
     }
 
     @Test
-    fun `should resolve part2`(){
+    fun `should resolve part2`() {
         val serialNumber = File("../input", "day11.txt").readText().toLong()
-        MaxPowerMatrix.getMaxPowerSquare(serialNumber) shouldEqual MaxPowerCell(233,228,91,12)
+        MaxPowerMatrix.getMaxPowerSquare(serialNumber) shouldEqual MaxPowerCell(233, 228, 91, 12)
     }
 }
