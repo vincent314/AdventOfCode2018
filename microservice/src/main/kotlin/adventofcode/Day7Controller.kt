@@ -14,13 +14,12 @@ class Day7Controller {
     @Get("/vertices")
     fun vertices(): List<VertexDTO> {
         val vertices = readFile(File("input", "day7.txt"))
-        return getSequence(vertices)
-                .mapNotNull { vertices[it] }
+        return vertices.values
                 .map { vertex ->
                     VertexDTO(
-                            vertex.value,
-                            vertex.next.map { it.value },
-                            vertex.previous.map { it.value }
+                            vertex.step,
+                            vertex.next.map { it.step },
+                            vertex.previous.map { it.step }
                     )
                 }
     }

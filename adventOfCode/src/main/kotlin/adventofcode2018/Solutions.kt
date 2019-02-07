@@ -17,7 +17,7 @@ class Solutions {
 
     var day1 = Day<Long, Long>()
     var day2 = Day<Int, String>()
-    var day7 = Day<String, String>()
+    var day7 = Day<String, Int>()
     var day8 = Day<Int, Int>()
     var day9 = Day<Long, Long>()
     var day11 = Day<String, String>()

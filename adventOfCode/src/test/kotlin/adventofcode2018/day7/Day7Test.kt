@@ -1,6 +1,5 @@
 package adventofcode2018.day7
 
-import adventofcode2018.Solutions
 import adventofcode2018.solutions
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
@@ -8,7 +7,7 @@ import java.io.File
 
 class Day7Test {
 
-    val solution = solutions().day7
+    private val solution = solutions().day7
 
     @Test
     fun testReadFileExample() {
@@ -26,7 +25,7 @@ class Day7Test {
     fun testBuildSequenceExample() {
         val vertices = readFile(File("../input", "day7-example.txt"))
 
-        getSequence(vertices) shouldEqual "CABDFE"
+        getSequence(vertices) shouldEqual ("CABDFE" to 6)
     }
 
     @Test
@@ -34,6 +33,19 @@ class Day7Test {
         val vertices = readFile(File("../input", "day7.txt"))
 
         val sequence = getSequence(vertices)
-        sequence shouldEqual solution.part1
+        sequence shouldEqual (solution.part1 to 26)
+    }
+
+    @Test
+    fun `should build example sequence with step duration`() {
+        val vertices = readFile(File("../input", "day7-example.txt"), true)
+
+        getSequence(vertices, 2) shouldEqual ("CABFDE" to 15)
+    }
+
+    @Test
+    fun `should resolve part 2`(){
+        val vertices = readFile(File("../input", "day7.txt"), true, 60)
+        getSequence(vertices, 5) shouldEqual ("BHTUMOFLQZCPWKIVNRXASJDYEG" to solution.part2)
     }
 }
