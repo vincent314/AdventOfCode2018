@@ -26,6 +26,12 @@ fun day4() {
             }
 }
 
+@JsName("say")
+fun say(message:String):String{
+    return "~.~ Hello, $message ~.~"
+}
+
 fun main(){
-    day4()
+    println(say("toto"))
+//    day4()
 }

@@ -27,7 +27,7 @@ compileKotlin2Js {
     kotlinOptions.outputFile = "$project.buildDir.path/js/${project.name}.js"
     kotlinOptions.sourceMap = true
     kotlinOptions.moduleKind = 'commonjs'
-    kotlinOptions.main = "call"
+//    kotlinOptions.main = "call"
 }
 
 kotlinFrontend {
