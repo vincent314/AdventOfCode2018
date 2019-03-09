@@ -1,67 +1,71 @@
 package adventofcode2018.day12
 
-class PotArray(
-        val size: Int = 10,
-        val offset: Int = 3,
-        val pots: MutableList<Boolean> = ArrayList<Boolean>(size + offset + 2).also {
-            for (i in 0 until size + offset + 2) {
-                it.add(false)
-            }
-        },
-        val instructions: Map<String, Boolean> = mapOf()
-) {
+import java.lang.IndexOutOfBoundsException
 
-    init {
-        require(offset >= 2)
-    }
+data class PotArray(
+        private val initialCapacity: Int = 30,
+        val pots: MutableList<Boolean> = ArrayList<Boolean>(initialCapacity).apply { fill(initialCapacity) },
+        val instructions: Map<String, Boolean> = mapOf(),
+        val leftPots: MutableList<Boolean> = ArrayList<Boolean>(3).apply { fill(3) }
+) {
 
     constructor(
             initialState: String,
-            instructions: Map<String, Boolean>,
-            offset: Int = 3
-    ) : this(
-            initialState.length,
-            offset,
-            initialState
-                    .let { (0 until offset).joinToString("") { "." } + it + ".." }
-                    .map { '#' == it }
-                    .toMutableList(),
-            instructions
+            instructions: Map<String, Boolean>) : this(
+            pots = initialState.map { it == '#' }.toMutableList(),
+            instructions = instructions
     )
 
-    operator fun get(index: Int): Boolean = pots[index.translated]
+    override fun toString(): String =
+            leftPots
+                    .slice(1 until leftPots.size)
+                    .reversed()
+                    .joinToString("") { it.toChar().toString() } +
+                    pots.joinToString("") { it.toChar().toString() }
 
-    operator fun set(index: Int, element: Boolean): Boolean = pots.set(index.translated, element)
-
-    fun slice(from: Int, to: Int): List<Boolean> {
-        return pots.slice(from.translated..to.translated)
-    }
-
-    override fun toString(): String = pots.joinToString("") { it.toChar().toString() }
-
-
-    fun next(steps: Int = 1) {
-
-        (0 until steps).forEach {
-            val previous = pots.toList()
-            for (i in 0..(size - 2)) {
-                pots[i] = getNextStep(previous, i)
+    operator fun get(idx: Int): Boolean =
+            when {
+                -idx in (1 until leftPots.size) -> leftPots[-idx]
+                idx in (0 until pots.size) -> pots[idx]
+                else -> false
             }
+
+    operator fun set(idx: Int, value: Boolean) {
+        when {
+            -idx in (1 until leftPots.size) -> leftPots[-idx] = value
+            idx in (0 until pots.size) -> pots[idx] = value
+            idx >= pots.size -> {
+                pots.fill(idx)
+                pots[idx] = value
+            }
+            else -> throw IndexOutOfBoundsException(idx.toString())
         }
     }
 
-    private fun getNextStep(previous: List<Boolean>, index: Int): Boolean {
-        val neighbourhood = getNeighbourhood(index, previous).toPotString()
-        return instructions[neighbourhood] ?: false
+    fun next(nb: Int = 1) {
+        (1..nb).forEach { _ ->
+            val previous = this.copy(pots = ArrayList(pots), leftPots = ArrayList(leftPots))
+            (-2 until pots.size + 1).forEach { idx ->
+                val newValue = instructions[previous.getNeighborhood(idx)] ?: false
+                this[idx] = newValue
+            }
+
+            compact()
+        }
     }
 
-    fun getNeighbourhood(index: Int, list: List<Boolean> = pots): List<Boolean> {
-        val from = index.translated - 2
-        val to = index.translated + 2
-        return list.slice(from..to)
+    private fun compact() {
+        (0 until pots.size).reversed().takeWhile { !pots[it] }
+                .forEach { pots.removeAt(it) }
     }
 
-    private val Int.translated: Int
-        get() = this + offset
+    fun getNeighborhood(idx: Int): String {
+        return (idx - 2..idx + 2).joinToString("") { this[it].toChar().toString() }
+    }
+
+    val signature: Int
+        get() {
+            return pots.mapIndexed { idx, value -> if (value) idx else 0 }.sum() +
+                    leftPots.mapIndexed { idx, value -> if (value) (-idx) else 0 }.sum()
+        }
 }
-

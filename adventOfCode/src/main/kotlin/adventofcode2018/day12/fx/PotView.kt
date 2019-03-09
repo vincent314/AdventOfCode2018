@@ -5,7 +5,6 @@ import adventofcode2018.day12.readFile
 import adventofcode2018.day12.viz.potViz
 import io.data2viz.viz.JFxVizRenderer
 import javafx.scene.canvas.Canvas
-import javafx.scene.control.Button
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 import java.io.File

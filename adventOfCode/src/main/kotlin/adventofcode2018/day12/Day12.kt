@@ -10,7 +10,6 @@ fun readFile(file: File): PotArray {
     lines.removeAt(0)
     val instructions = lines
             .asSequence()
-            .onEach(::println)
             .map {
                 val (before, after) = it.split(Regex(""" => """), 2)
                 before to (after.first() == '#')
@@ -20,9 +19,10 @@ fun readFile(file: File): PotArray {
     return PotArray(initialState, instructions = instructions)
 }
 
+fun MutableCollection<Boolean>.fill(nb: Int) {
+    for (i in size..nb) {
+        this.add(false)
+    }
+}
 
-fun Boolean.toChar(): Char = if (this) '#' else '.'
-fun List<Boolean>.toPotString(): String = joinToString("") { it.toChar().toString() }
-
-
-
+fun Boolean.toChar():Char = if(this) '#' else '.'

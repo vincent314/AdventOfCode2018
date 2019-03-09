@@ -24,11 +24,11 @@ fun potViz(potArray: PotArray, width: Double) = viz {
         lineTo(xOffset + 5, yOffset + 20)
         closePath()
       }
-      text {
-        textContent = (idx - potArray.offset).toString()
-        x = xOffset + 5
-        y = yOffset + 30
-      }
+//      text {
+//        textContent = (idx - potArray.offset).toString()
+//        x = xOffset + 5
+//        y = yOffset + 30
+//      }
 
       if (hasPlant) {
         line {

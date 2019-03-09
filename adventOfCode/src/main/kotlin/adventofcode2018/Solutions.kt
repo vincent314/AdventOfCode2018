@@ -21,5 +21,6 @@ class Solutions {
     var day8 = Day<Int, Int>()
     var day9 = Day<Long, Long>()
     var day11 = Day<String, String>()
+    var day12 = Day<Int,Int>()
 
 }
