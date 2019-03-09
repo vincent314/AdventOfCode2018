@@ -3,7 +3,6 @@ package adventofcode2018.day12.viz
 import adventofcode2018.day12.PotArray
 import io.data2viz.color.Colors
 import io.data2viz.scale.Scales
-import io.data2viz.viz.textAlign
 import io.data2viz.viz.viz
 
 fun potViz(potArray: PotArray, width: Double) = viz {
@@ -13,7 +12,7 @@ fun potViz(potArray: PotArray, width: Double) = viz {
   }
 
 
-  potArray.forEachIndexed { idx, hasPlant ->
+  potArray.pots.forEachIndexed { idx, hasPlant ->
     val xOffset = scale(idx)
     val yOffset = 50.0
     group {

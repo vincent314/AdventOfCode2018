@@ -13,13 +13,11 @@ import java.io.File
 class PotView : View("My View") {
   override val root: BorderPane by fxml()
 
-  val potCanvas: Canvas by fxid()
-  val nextButton: Button by fxid()
-  val potArray: PotArray
-  val renderer:JFxVizRenderer
+  private val potCanvas: Canvas by fxid()
+  private val potArray: PotArray = readFile(File("./input", "day12-example.txt"))
+  private val renderer:JFxVizRenderer
 
   init {
-    potArray = readFile(File("./input", "day12-example.txt"))
     renderer = JFxVizRenderer(potCanvas, potViz(potArray, potCanvas.width))
     renderer.render()
   }

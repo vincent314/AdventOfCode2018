@@ -26,7 +26,7 @@ class Day12Test {
 
         (-2..5).map { potArray[it] }.toBooleanArray() shouldEqual booleanArrayOf(false, false, true, false, false, true, false, true)
 
-        potArray.instructions shouldEqual listOf(
+        potArray.instructions shouldEqual mapOf(
                 "...##" to '#',
                 "..#.." to '#',
                 ".#..." to '#',
@@ -46,9 +46,18 @@ class Day12Test {
 
     @Test
     fun `should get neighbourhoud`() {
-        val potArray = readFile(File("../input", "day12-example.txt"))
+        val potArray:PotArray = readFile(File("../input", "day12-example.txt"))
         potArray.getNeighbourhood(0).toPotString() shouldEqual "..#.."
         potArray.getNeighbourhood(1).toPotString() shouldEqual ".#..#"
         potArray.getNeighbourhood(24).toPotString() shouldEqual "###.."
+    }
+
+    @Test
+    fun `should get next generation`() {
+        val potArray:PotArray = readFile(File("../input", "day12-example.txt"))
+
+        potArray.next(1)
+
+        potArray.toString() shouldEqual ""
     }
 }
