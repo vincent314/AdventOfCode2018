@@ -10,11 +10,4 @@
    <center>
       <Canvas fx:id="potCanvas" height="427.0" width="606.0" BorderPane.alignment="CENTER" />
    </center>
-   <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="nextButton" mnemonicParsing="false" onAction="#doNext" text="Next" />
-         </children>
-      </HBox>
-   </bottom>
 </BorderPane>

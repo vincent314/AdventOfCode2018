@@ -1,71 +1,55 @@
 package adventofcode2018.day12
 
-import java.lang.IndexOutOfBoundsException
+import java.util.*
+import kotlin.system.measureTimeMillis
 
 data class PotArray(
-        private val initialCapacity: Int = 30,
-        val pots: MutableList<Boolean> = ArrayList<Boolean>(initialCapacity).apply { fill(initialCapacity) },
-        val instructions: Map<String, Boolean> = mapOf(),
-        val leftPots: MutableList<Boolean> = ArrayList<Boolean>(3).apply { fill(3) }
+        var pots: OffsetList = OffsetList(),
+        val instructions: Map<String, Boolean> = mapOf()
 ) {
 
     constructor(
             initialState: String,
-            instructions: Map<String, Boolean>) : this(
-            pots = initialState.map { it == '#' }.toMutableList(),
+            instructions: Map<String, Boolean> = mapOf()) : this(
+            pots = OffsetList(initialState),
             instructions = instructions
     )
 
-    override fun toString(): String =
-            leftPots
-                    .slice(1 until leftPots.size)
-                    .reversed()
-                    .joinToString("") { it.toChar().toString() } +
-                    pots.joinToString("") { it.toChar().toString() }
+    override fun toString(): String = pots.toString()
 
-    operator fun get(idx: Int): Boolean =
-            when {
-                -idx in (1 until leftPots.size) -> leftPots[-idx]
-                idx in (0 until pots.size) -> pots[idx]
-                else -> false
+    operator fun get(idx: Int): Boolean = pots[idx]
+
+    fun next(nb: Long = 1) {
+        var time = 0L
+        for (loop in 1..nb) {
+            if (loop % 1000 == 0L) {
+                println("1000 iterations time = $time ms")
+                time = 0L
             }
 
-    operator fun set(idx: Int, value: Boolean) {
-        when {
-            -idx in (1 until leftPots.size) -> leftPots[-idx] = value
-            idx in (0 until pots.size) -> pots[idx] = value
-            idx >= pots.size -> {
-                pots.fill(idx)
-                pots[idx] = value
+            time += measureTimeMillis {
+                val idxRange = pots.idxRange
+                val target = Vector<Boolean>(idxRange.count()+3)
+                for (idx in idxRange.start until idxRange.endInclusive+2) {
+                    val newValue = instructions[getNeighborhood(idx)] ?: false
+                    target += newValue
+                }
+                pots = OffsetList(compact(target.toMutableList()))
             }
-            else -> throw IndexOutOfBoundsException(idx.toString())
         }
     }
 
-    fun next(nb: Int = 1) {
-        (1..nb).forEach { _ ->
-            val previous = this.copy(pots = ArrayList(pots), leftPots = ArrayList(leftPots))
-            (-2 until pots.size + 1).forEach { idx ->
-                val newValue = instructions[previous.getNeighborhood(idx)] ?: false
-                this[idx] = newValue
-            }
 
-            compact()
-        }
-    }
-
-    private fun compact() {
-        (0 until pots.size).reversed().takeWhile { !pots[it] }
-                .forEach { pots.removeAt(it) }
+    private fun compact(list: MutableList<Boolean>): MutableList<Boolean> {
+        (0 until list.size).reversed().takeWhile { !list[it] }
+                .forEach { list.removeAt(it) }
+        return list
     }
 
     fun getNeighborhood(idx: Int): String {
         return (idx - 2..idx + 2).joinToString("") { this[it].toChar().toString() }
     }
 
-    val signature: Int
-        get() {
-            return pots.mapIndexed { idx, value -> if (value) idx else 0 }.sum() +
-                    leftPots.mapIndexed { idx, value -> if (value) (-idx) else 0 }.sum()
-        }
+    val signature: Long
+        get() = pots.idxRange.map { if (pots[it]) it.toLong() else 0L }.sum()
 }

@@ -25,4 +25,6 @@ fun MutableCollection<Boolean>.fill(nb: Int) {
     }
 }
 
-fun Boolean.toChar():Char = if(this) '#' else '.'
+fun Boolean.toChar(): Char = if (this) '#' else '.'
+
+fun String.parsePots(): List<Boolean> = map { it == '#' }
