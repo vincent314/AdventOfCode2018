@@ -21,11 +21,9 @@ class PotView : View("My View") {
         }
     }
 
-    fun drawLine(y:Int) {
-        potArray.pots.list.forEachIndexed { idx, value ->
-            if(value) {
-                pixelWriter.setColor(idx, y, Color.BLACK)
-            }
+    fun drawLine(y: Int) {
+        potArray.pots.pots.forEach { idx ->
+            pixelWriter.setColor(idx, y, Color.BLACK)
         }
     }
 

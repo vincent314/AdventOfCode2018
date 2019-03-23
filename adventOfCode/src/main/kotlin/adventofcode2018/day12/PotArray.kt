@@ -4,14 +4,14 @@ import java.util.*
 import kotlin.system.measureTimeMillis
 
 data class PotArray(
-        var pots: OffsetList = OffsetList(),
+        var pots: PotSet = PotSet(),
         val instructions: Map<String, Boolean> = mapOf()
 ) {
 
     constructor(
             initialState: String,
             instructions: Map<String, Boolean> = mapOf()) : this(
-            pots = OffsetList(initialState),
+            pots = PotSet(initialState),
             instructions = instructions
     )
 
@@ -19,23 +19,14 @@ data class PotArray(
 
     operator fun get(idx: Int): Boolean = pots[idx]
 
-    fun next(nb: Long = 1) {
-        var time = 0L
+    fun next(nb: Int = 1) {
         for (loop in 1..nb) {
-            if (loop % 1000 == 0L) {
-                println("1000 iterations time = $time ms")
-                time = 0L
+            val target = PotSet()
+            for (idx in pots.idxRange) {
+                val newValue = instructions[getNeighborhood(idx)] ?: false
+                target[idx] = newValue
             }
-
-            time += measureTimeMillis {
-                val idxRange = pots.idxRange
-                val target = Vector<Boolean>(idxRange.count()+3)
-                for (idx in idxRange.start until idxRange.endInclusive+2) {
-                    val newValue = instructions[getNeighborhood(idx)] ?: false
-                    target += newValue
-                }
-                pots = OffsetList(compact(target.toMutableList()))
-            }
+            pots = target
         }
     }
 
@@ -51,5 +42,5 @@ data class PotArray(
     }
 
     val signature: Long
-        get() = pots.idxRange.map { if (pots[it]) it.toLong() else 0L }.sum()
+        get() = pots.pots.map(Int::toLong).sum()
 }

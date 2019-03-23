@@ -3,10 +3,9 @@ package adventofcode2018.day12
 import adventofcode2018.solutions
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
-import org.junit.Ignore
 import org.junit.Test
+import org.nield.kotlinstatistics.simpleRegression
 import java.io.File
-import kotlin.system.measureTimeMillis
 
 class Day12Test {
 
@@ -15,7 +14,7 @@ class Day12Test {
     @Test
     fun `should get and set value with an offset`() {
         val potArray = PotArray("#..#.........")
-        potArray.toString() shouldEqual "...#..#........."
+        potArray.toString() shouldEqual "...#..#"
     }
 
     @Test
@@ -56,7 +55,7 @@ class Day12Test {
     fun `should get next generation`() {
         val potArray: PotArray = readFile(File("../input", "day12-example.txt"))
 
-        fun doNext(expected: String, nb: Long = 1L) {
+        fun doNext(expected: String, nb: Int = 1) {
             potArray.next(nb)
             potArray.toString() shouldEqual expected
         }
@@ -108,29 +107,16 @@ class Day12Test {
     }
 
     @Test
-    @Ignore
-    fun `should resolve part2`() {
+    fun `should resolve part2 - extrapolate`() {
         val potArray: PotArray = readFile(File("../input", "day12.txt"))
-        println("part2 execution time = " + measureTimeMillis {
-            potArray.next(5_000_000)
-        })
-        potArray.signature shouldEqual solution.part2
-    }
+        val result = (1000..10_000 step 1_000).map {
+            potArray.next(1_000)
+            it to potArray.signature
+        }
+                .simpleRegression()
+                .predict(50_000_000_000.0)
+                .toLong()
+        result shouldEqual solution.part2
 
-    @Test
-    fun `should test offset list`() {
-        var list = OffsetList(listOf(true, false, true, false), 2)
-
-        list.toString() shouldEqual "#.#."
-
-        list[-3] shouldBe false
-        list[-2] shouldBe true
-        list[-1] shouldBe false
-        list[0] shouldBe true
-        list[1] shouldBe false
-        list[2] shouldBe false
-
-        list = OffsetList(".#..#.", 2)
-        list.toString() shouldEqual "...#..#."
     }
 }
