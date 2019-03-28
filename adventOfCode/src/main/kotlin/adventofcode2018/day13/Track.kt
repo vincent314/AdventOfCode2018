@@ -5,7 +5,8 @@ import java.io.File
 class Track(input: String) {
 
     private val elements: Array<CharArray> = parseElements(input)
-    val carts: List<Cart> = parseCarts(input)
+    val carts: MutableList<Cart> = parseCarts(input).toMutableList()
+    val collisionLog: MutableList<Position> = mutableListOf()
 
     constructor(file: File) : this(file.readText())
 
@@ -55,9 +56,15 @@ class Track(input: String) {
         carts.forEach { cart ->
             cart.nextTick(this)
         }
+        val coll = collisions
+        collisionLog.addAll(coll.map { it.position })
+        carts.removeAll(coll)
+        coll.forEach {
+            println("Collision at ${it.position} (${carts.size} carts remaining)")
+        }
     }
 
-    val collisions: List<Cart>
+    private val collisions: List<Cart>
         get() {
             return carts.groupBy(Cart::position)
                     .filterValues { it.size > 1 }

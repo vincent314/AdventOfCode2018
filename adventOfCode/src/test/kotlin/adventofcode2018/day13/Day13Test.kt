@@ -212,20 +212,77 @@ class Day13Test {
                               |  \------/""".trimMargin()
         val track = Track(input)
         track.nextTick()
-        track.collisions shouldEqual listOf(
-                Cart(DOWN, Position(x = 7, y = 3)),
-                Cart(UP, Position(x = 7, y = 3))
+        track.collisionLog shouldEqual listOf(
+                Position(x = 7, y = 3),
+                Position(x = 7, y = 3)
         )
     }
 
     @Test
-    fun `should resolve part1`(){
-        val track = Track(File("../input","day13.txt"))
+    fun `should resolve part1`() {
+        val track = Track(File("../input", "day13.txt"))
         do {
             track.nextTick()
-        } while(track.collisions.isEmpty())
+        } while (track.collisionLog.isEmpty())
 
-        track.collisions.first().position.toString() shouldEqual "5,102"
+        track.collisionLog.first().toString() shouldEqual "5,102"
+    }
+
+    @Test
+    fun `should play until last crash`() {
+        val input =
+                """/>-<\
+                  ||   |
+                  || /<+-\
+                  || | | v
+                  |\>+</ |
+                  |  |   ^
+                  |  \<->/""".trimMargin()
+        val track = Track(input)
+
+        val steps = mutableListOf<String>()
+
+        while (track.carts.size > 1) {
+            track.nextTick()
+            steps += track.toString()
+        }
+
+        steps.joinToString("\n\n") shouldEqual
+                """/---\
+                  ||   |
+                  || v-+-\
+                  || | | |
+                  |\-+-/ |
+                  |  |   |
+                  |  ^---^
+                  |
+                  |/---\
+                  ||   |
+                  || /-+-\
+                  || v | |
+                  |\-+-/ |
+                  |  ^   ^
+                  |  \---/
+                  |
+                  |/---\
+                  ||   |
+                  || /-+-\
+                  || | | |
+                  |\-+-/ ^
+                  |  |   |
+                  |  \---/""".trimMargin()
+
+        track.carts.map { it.position.toString() } shouldEqual listOf("6,4")
+    }
+
+    @Test
+    fun `should resolve part2`() {
+        val track = Track(File("../input", "day13.txt"))
+        while (track.carts.size > 1) {
+            track.nextTick()
+        }
+
+        track.carts.map { it.position.toString() } shouldEqual listOf("116,54")
     }
 
 }
