@@ -1,8 +1,5 @@
 package adventofcode2018.day12
 
-import java.util.*
-import kotlin.system.measureTimeMillis
-
 data class PotArray(
         var pots: PotSet = PotSet(),
         val instructions: Map<String, Boolean> = mapOf()
