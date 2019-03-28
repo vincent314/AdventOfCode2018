@@ -4,9 +4,11 @@ import java.io.File
 
 class Track(input: String) {
 
-    private val elements: Array<CharArray> = parseElements(input)
+    val elements: Array<CharArray> = parseElements(input)
     val carts: MutableList<Cart> = parseCarts(input).toMutableList()
     val collisionLog: MutableList<Position> = mutableListOf()
+    val maxWidth: Int
+        get() = elements.map { it.size }.max() ?: 0
 
     constructor(file: File) : this(file.readText())
 
