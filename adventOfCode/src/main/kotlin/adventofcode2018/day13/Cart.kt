@@ -2,7 +2,9 @@ package adventofcode2018.day13
 
 import adventofcode2018.day13.DirectionEnum.*
 
-data class Cart(var direction: DirectionEnum, var position: Position, var turn: TurnEnum = TurnEnum.LEFT) {
+data class Cart(val id:Int, var direction: DirectionEnum, var position: Position, var turn: TurnEnum = TurnEnum.LEFT):Comparable<Cart> {
+    override fun compareTo(other: Cart): Int = position.compareTo(other.position)
+
     fun toChar(): Char = when (direction) {
         UP -> '^'
         DOWN -> 'v'

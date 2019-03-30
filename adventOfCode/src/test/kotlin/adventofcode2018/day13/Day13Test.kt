@@ -1,9 +1,11 @@
 package adventofcode2018.day13
 
 import adventofcode2018.day13.DirectionEnum.*
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
 import java.io.File
+import java.util.*
 
 
 class Day13Test {
@@ -38,9 +40,9 @@ class Day13Test {
                                        |\-+-/  \-+--/
                                        |  \------/""".trimMargin()
 
-        track.carts shouldEqual listOf(
-                Cart(RIGHT, Position(2, 0)),
-                Cart(DOWN, Position(9, 3)))
+        track.carts shouldEqual TreeSet(listOf(
+                Cart(0, RIGHT, Position(2, 0)),
+                Cart(1, DOWN, Position(9, 3))))
     }
 
     @Test
@@ -216,6 +218,29 @@ class Day13Test {
                 Position(x = 7, y = 3),
                 Position(x = 7, y = 3)
         )
+        track.carts.size shouldBe 0
+    }
+
+    @Test
+    fun `should test collision on intersection`() {
+        val input =
+                """/>-<\
+                  ||   |
+                  || /<+-\
+                  || | | v
+                  |\>+</ |
+                  |  |   ^
+                  |  \---/""".trimMargin()
+        val track = Track(input)
+        track.nextTick()
+        track.toString() shouldEqual
+                """/---\
+                  ||   |
+                  || v-+-\
+                  || | | |
+                  |\-+-/ |
+                  |  |   |
+                  |  \---/""".trimMargin()
     }
 
     @Test
@@ -282,7 +307,8 @@ class Day13Test {
             track.nextTick()
         }
 
-        track.carts.map { it.position.toString() } shouldEqual listOf("116,54")
+        track.collisionLog.forEach(::println)
+        track.carts.map { it.position.toString() } shouldEqual listOf("46,45")
     }
 
 }

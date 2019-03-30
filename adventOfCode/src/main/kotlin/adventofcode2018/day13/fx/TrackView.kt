@@ -24,6 +24,9 @@ class TrackView : View("My View") {
     init {
         t = timer(200.0) {
             JFxVizRenderer(trackCanvas, trackViz(trackCanvas.width, track)).render()
+            if(track.carts.size == 1){
+                pause = true
+            }
             if (!pause) {
                 track.nextTick()
             }

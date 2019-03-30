@@ -1,11 +1,12 @@
 package adventofcode2018.day13
 
 import java.io.File
+import java.util.*
 
 class Track(input: String) {
 
     val elements: Array<CharArray> = parseElements(input)
-    val carts: MutableList<Cart> = parseCarts(input).toMutableList()
+    var carts: SortedSet<Cart> = TreeSet(parseCarts(input))
     val collisionLog: MutableList<Position> = mutableListOf()
     val maxWidth: Int
         get() = elements.map { it.size }.max() ?: 0
@@ -37,12 +38,13 @@ class Track(input: String) {
     }
 
     private fun parseCarts(input: String): List<Cart> {
+        var cartId = 0
         return input.lineSequence()
                 .mapIndexed { y, line ->
                     line.mapIndexedNotNull { x, c ->
                         DirectionEnum.from(c)
                                 ?.let { direction ->
-                                    Cart(direction, Position(x, y))
+                                    Cart(cartId++, direction, Position(x, y))
                                 }
                     }
                 }
@@ -55,22 +57,18 @@ class Track(input: String) {
     }
 
     fun nextTick() {
+        val collisionCartIds = mutableListOf<Int>()
         carts.forEach { cart ->
+            if (collisionCartIds.contains(cart.id)) return@forEach
             cart.nextTick(this)
+            carts.filter { it.position == cart.position }
+                    .takeIf { it.size > 1 }
+                    ?.also {
+                        collisionCartIds.addAll(it.map(Cart::id))
+                        collisionLog.addAll(it.map(Cart::position))
+                    }
         }
-        val coll = collisions
-        collisionLog.addAll(coll.map { it.position })
-        carts.removeAll(coll)
-        coll.forEach {
-            println("Collision at ${it.position} (${carts.size} carts remaining)")
-        }
+        carts.removeIf { it.id in collisionCartIds }
+        carts = carts.toSortedSet()
     }
-
-    private val collisions: List<Cart>
-        get() {
-            return carts.groupBy(Cart::position)
-                    .filterValues { it.size > 1 }
-                    .values
-                    .flatten()
-        }
 }
