@@ -1,25 +1,25 @@
 package adventofcode2018.day14
 
-
 class ScoreBoard(initList: MutableList<Int>) : MutableList<Int> by initList {
     private val nextRecipesCount: Int = 10
 
-    val elves: List<Elf> = listOf(Elf(0, this), Elf(1, this))
+    private val elf1 = Elf(0, this)
+    private val elf2 = Elf(1, this)
 
     internal fun createRecipe() {
-        val newRecipes = elves
-                .map {
-                    get(it.position)
-                }
-                .sum()
-                .toString()
-                .map { it.toString().toInt() }
-
-        addAll(newRecipes)
+        val sum = (get(elf1.position) + get(elf2.position))
+        when {
+            sum > 9 -> {
+                add(1)
+                add(sum % 10)
+            }
+            else -> add(sum)
+        }
     }
 
     private fun moveElves() {
-        elves.forEach(Elf::move)
+        elf1.move()
+        elf2.move()
     }
 
     fun play(steps: Int = 1) {
@@ -34,8 +34,20 @@ class ScoreBoard(initList: MutableList<Int>) : MutableList<Int> by initList {
         return subList(input, input + nextRecipesCount).joinToString("")
     }
 
+    fun resolve2(input: String): Int {
+        val nbBefore = input.length
+        var step = nbBefore
+        play(nbBefore)
+        while (subList(size - nbBefore, size).joinToString("") != input) {
+            val previousSize = size
+            play()
+            step += size - previousSize
+        }
+        return step - 1
+    }
+
+
     override fun toString(): String {
-        val (elf1, elf2) = elves
         return mapIndexed { index, score ->
             when (index) {
                 elf1.position -> "($score)"
