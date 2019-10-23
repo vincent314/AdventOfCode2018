@@ -2,6 +2,8 @@ package adventofcode2018.day15
 
 import adventofcode2018.day15.SquareType.*
 
+typealias Matrix = List<List<SquareType>>
+
 class Area(map: String) {
     var matrix: Matrix = listOf(listOf())
 
